@@ -5,6 +5,7 @@ from sqlmodel import Field, SQLModel, Relationship
 
 from datetime import datetime, timezone
 import sqlalchemy as sa
+from pydantic import EmailStr
 
 from backend.database.models.base import SQLModelSerializable
 
@@ -31,3 +32,9 @@ class User(SQLModelSerializable, table=True):
     last_login_at: Optional[datetime] = Field(
         sa_column=sa.Column(sa.DateTime(timezone=True), nullable=False),
     )
+
+class UserPatchModel(SQLModel):
+    email: Optional[EmailStr] = Field()
+    is_active: Optional[bool] = Field()
+    is_superuser: Optional[bool] = Field()
+    last_login_at: Optional[datetime] = Field()
