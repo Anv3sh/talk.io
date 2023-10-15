@@ -1,8 +1,3 @@
-from fastapi import APIRouter, status, Depends, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
-
-from datetime import datetime, timezone
-
 from sqlmodel import Session
 
 from uuid import uuid4, UUID
@@ -11,14 +6,25 @@ from pydantic import EmailStr
 
 from typing import List
 
-user_router = APIRouter(prefix="/users", tags=["Users"])
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, status, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
+
+from backend.api.schema import UserAuth
+from backend.api.auth import get_password_hash
+from backend.database.connections import get_db_session
+from backend.database.utils import get_user_by_email
+from backend.database.models.user import User
+
+user_router = APIRouter(prefix="/user", tags=["User"])
 
 
 # User authentication and authorization
 @user_router.post(
     "/signup", summary="User registration", status_code=status.HTTP_201_CREATED
 )  # noqa
-async def signup(data: UserAuth, session: Session = Depends(get_session)):  # noqa
+async def signup(data: UserAuth, session:Session = Depends(get_db_session)):  # noqa
     """
     User registration
     """
@@ -37,20 +43,13 @@ async def signup(data: UserAuth, session: Session = Depends(get_session)):  # no
         "password": get_password_hash(data.password),
         "user_id": str(uuid4()),
     }
-    user_model = Users(**user_map)
+    user_model = User(**user_map)
 
     session.add(user_model)
     session.commit()
 
-    user_url = get_user_specfic_url(user_id=user_model.user_id)
-    email_user(
-        email_address=user_model.email,
-        name=user_model.first_name + " " + user_model.last_name,
-        url=user_url,
-    )  # noqa
-
     return {
-        "details": "Signup successful, a confirmation mail is sent to your email.",  # noqa
+        "details": "Signup successful",  # noqa
         "is_email_verified": user_model.is_email_verified,
     }
 
@@ -62,7 +61,7 @@ async def signup(data: UserAuth, session: Session = Depends(get_session)):  # no
 )  # noqa
 async def login_to_get_tokens(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_session),
+    db: Session = Depends(get_db_session),
 ):
     if user := authenticate_user(form_data.username, form_data.password, db):
         tokens = create_user_tokens(

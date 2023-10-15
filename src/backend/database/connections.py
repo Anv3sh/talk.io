@@ -27,6 +27,6 @@ def get_db_connection_url():
 engine = create_engine(get_db_connection_url())
 
 
-def get_nextence_db_session():
+def get_db_session():
     with Session(engine) as session:
         yield session
