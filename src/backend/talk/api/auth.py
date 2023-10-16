@@ -1,17 +1,19 @@
 import os
 from uuid import UUID
 
-from typing import Optional, Dict
+from typing import Optional, Dict, Annotated
 from datetime import timedelta
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 from sqlmodel import Session
 from datetime import datetime,timedelta,timezone
 
+from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 
 from talk.database.operations.user import get_user_by_email, update_user
 from talk.database.connections import get_db_session
+from talk.database.models.user import User, UserPatchModel
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 1 day
@@ -23,6 +25,38 @@ JWT_SECRET_KEY = (
 JWT_REFRESH_SECRET_KEY = os.getenv("JWT_REFRESH_SECRET_KEY") or "talkiosecret"  # noqa
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="/talk/api/users/login")
+
+
+async def get_current_user(
+    token: Annotated[str, Depends(oauth2_schema)],
+    db: Session = Depends(get_db_session),  # noqa
+) -> User:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    try:
+        payload = jwt.decode(
+            token,
+            JWT_SECRET_KEY,
+            algorithms=[ALGORITHM],
+        )
+        user_id: UUID = payload.get("sub")  # type: ignore
+        token_type: str = payload.get("type")  # type: ignore
+
+        if user_id is None or token_type:
+            raise credentials_exception
+    except JWTError as e:
+        raise credentials_exception from e
+
+    user = get_user_by_id(db, user_id, object=True)  # type: ignore
+    if user is None:
+        raise credentials_exception
+    return user
+
 
 def create_user_tokens(
     user_id: UUID,
@@ -43,7 +77,7 @@ def create_user_tokens(
 
     # Update: last_login_at
     if update_last_login:
-        update_user_last_login_at(db, user_id)
+        update_user_last_login_at(user_id, db)
 
     return {
         "access_token": access_token,
@@ -98,8 +132,8 @@ def update_user_last_login_at(
     return update_user(user_id, user_data, db)
 
 
-def authenticate_user(email: str, password: str):
-    user = get_user_by_email(email)
+def authenticate_user(email: str, password: str, db: Session):
+    user = get_user_by_email(db,email)
 
     if not user:
         return None

@@ -12,7 +12,7 @@ from fastapi import APIRouter, status, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
 from talk.api.schema import UserAuth, LoginResponseSchema
-from talk.api.auth import get_password_hash, authenticate_user, create_user_tokens
+from talk.api.auth import get_password_hash, authenticate_user, create_user_tokens, get_current_user
 from talk.database.connections import get_db_session
 from talk.database.models.user import User
 from talk.database.operations.user import get_user_by_email
@@ -50,7 +50,6 @@ async def signup(data: UserAuth, session:Session = Depends(get_db_session)):  # 
 
     return {
         "details": "Signup successful",  # noqa
-        "is_email_verified": user_model.is_email_verified,
     }
 
 @user_router.post(
@@ -74,3 +73,14 @@ async def login_to_get_tokens(
             detail="Incorrect username or password.",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    
+@user_router.get(
+    "/health",
+    summary="Health check",
+    status_code=status.HTTP_200_OK,
+)
+async def health(user: User = Depends(get_current_user)):
+    return {
+        "status":200,
+        "body": {"message":"Health ok!"},
+    }
