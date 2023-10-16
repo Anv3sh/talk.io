@@ -26,3 +26,16 @@ def get_user_by_id(
     if object:
         return db_user
     return User.from_orm(db_user) if db_user else None  # type: ignore
+
+def update_user(
+    db:Session, id: UUID
+):
+    try:    
+        user_db = db.get(User,id)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail="User not found!")
+    user_db.updated_at = datetime.now(timezone.utc)
+    user_db = db.merge(user_db)
+    db.commit()
+    if db.identity_key(instance=user_db) is not None:
+        db.refresh(user_db)
