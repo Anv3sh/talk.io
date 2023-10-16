@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 
 from datetime import datetime, timezone
 
-from database.models.user import User
+from backend.database.models.user import User
 from typing import Union
 
 def get_user_by_email(

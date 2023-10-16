@@ -14,8 +14,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from backend.api.schema import UserAuth, LoginResponseSchema
 from backend.api.auth import get_password_hash, authenticate_user, create_user_tokens
 from backend.database.connections import get_db_session
-from backend.database.utils import get_user_by_email
 from backend.database.models.user import User
+from backend.database.operations.user import get_user_by_email
 
 user_router = APIRouter(prefix="/user", tags=["User"])
 

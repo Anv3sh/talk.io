@@ -1,7 +1,7 @@
-from .api.router import router
+from backend.api.router import router
 from fastapi import FastAPI
-from .database.connections import get_db_connection_url
-from .database.manager import DatabaseManager
+from backend.database.connections import get_db_connection_url
+from backend.database.manager import DatabaseManager
 
 
 DATABASE_URL = get_db_connection_url()

@@ -1,6 +1,6 @@
 from sqlmodel import create_engine, Session, SQLModel
 from backend.database.connections import get_db_connection_url
-
+from backend.database.models import user, pfp
 
 class DatabaseManager:
     def __init__(self, database_url: str):

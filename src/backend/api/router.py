@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from .endpoints import sahyog_router
+from backend.api.endpoints import user_router
 
 router = APIRouter(
     prefix="/talk/api",
 )
 
-router.include_router(sahyog_router)
+router.include_router(user_router)
