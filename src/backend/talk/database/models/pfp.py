@@ -6,10 +6,10 @@ from sqlmodel import Field, SQLModel, Relationship
 from datetime import datetime, timezone
 import sqlalchemy as sa
 
-from backend.database.models.base import SQLModelSerializable
+from talk.database.models.base import SQLModelSerializable
 
 if TYPE_CHECKING:
-    from backend.database.models.user import User
+    from talk.database.models.user import User
 
 class PFP(SQLModelSerializable, table = True):
     id: UUID = Field(default_factory=uuid4, primary_key=True, unique=True)

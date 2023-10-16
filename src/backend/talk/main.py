@@ -1,7 +1,7 @@
-from backend.api.router import router
+from talk.api.router import router
 from fastapi import FastAPI
-from backend.database.connections import get_db_connection_url
-from backend.database.manager import DatabaseManager
+from talk.database.connections import get_db_connection_url
+from talk.database.manager import DatabaseManager
 
 
 DATABASE_URL = get_db_connection_url()

@@ -3,11 +3,11 @@ from pathlib import Path
 from alembic.config import Config
 from alembic import command
 
-from backend.api.logger import logger
+from talk.api.logger import logger
 
 from sqlmodel import create_engine, Session, SQLModel
-from backend.database.connections import get_db_connection_url
-from backend.database.models import user, pfp
+from talk.database.connections import get_db_connection_url
+from talk.database.models import user, pfp
 
 class DatabaseManager:
     def __init__(self, database_url: str):

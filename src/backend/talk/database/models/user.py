@@ -7,10 +7,10 @@ from datetime import datetime, timezone
 import sqlalchemy as sa
 from pydantic import EmailStr
 
-from backend.database.models.base import SQLModelSerializable
+from talk.database.models.base import SQLModelSerializable
 
 if TYPE_CHECKING:
-    from backend.database.models.pfp import PFP
+    from talk.database.models.pfp import PFP
 
 class User(SQLModelSerializable, table=True):
     user_id: UUID = Field(default_factory=uuid4, primary_key=True, unique=True)

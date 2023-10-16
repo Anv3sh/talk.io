@@ -10,8 +10,8 @@ from datetime import datetime,timedelta,timezone
 
 from fastapi import Depends, HTTPException, status
 
-from backend.database.operations.user import get_user_by_email, update_user
-from backend.database.connections import get_db_session
+from talk.database.operations.user import get_user_by_email, update_user
+from talk.database.connections import get_db_session
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 1 day
