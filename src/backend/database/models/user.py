@@ -30,7 +30,7 @@ class User(SQLModelSerializable, table=True):
         default_factory=lambda: datetime.utcnow().replace(tzinfo=timezone.utc),
     )
     last_login_at: Optional[datetime] = Field(
-        sa_column=sa.Column(sa.DateTime(timezone=True), nullable=False),
+        sa_column=sa.Column(sa.DateTime(timezone=True), nullable=True),
     )
 
 class UserPatchModel(SQLModel):

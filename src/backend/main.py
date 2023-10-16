@@ -9,6 +9,7 @@ DATABASE_URL = get_db_connection_url()
 
 def initialize_database():
     db_manager = DatabaseManager(DATABASE_URL)
+    db_manager.run_migrations()
     db_manager.create_db_and_tables()
 
 
