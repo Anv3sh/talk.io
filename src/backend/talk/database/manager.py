@@ -53,9 +53,10 @@ class DatabaseManager:
         from sqlalchemy import inspect
 
         inspector = inspect(self.engine)
-        required_tables = ["user","pfp"]
+        required_tables = ["user","pfp","alembic_version"]
         for table in inspector.get_table_names():
             if table not in required_tables:
+                print(table)
                 print("Something went wrong creating the database and tables.")
                 print("Please check your database settings.")
                 raise RuntimeError("Something went wrong creating the database and tables.")
