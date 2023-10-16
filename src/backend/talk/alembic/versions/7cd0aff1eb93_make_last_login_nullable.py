@@ -28,9 +28,9 @@ def table_exists(table_name):
 
 def upgrade() -> None:
     if table_exists(table_name):
-        op.alter_column(table_name,sa.Column("last_login_at"),existing_type=sa.String(255),nullable=True)
+        op.alter_column(table_name,sa.Column("last_login_at"),existing_nullable=False,nullable=True)
 
 
 def downgrade() -> None:
     if table_exists(table_name):
-        op.alter_column(table_name,sa.Column("last_login_at"),existing_type=sa.String(255),nullable=False)
+        op.alter_column(table_name,sa.Column("last_login_at"),existing_nullable=True,nullable=False)
