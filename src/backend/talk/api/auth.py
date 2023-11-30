@@ -11,7 +11,7 @@ from datetime import datetime,timedelta,timezone
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 
-from talk.database.operations.user import get_user_by_email, update_user
+from talk.database.operations.user import get_user_by_email, update_user, get_user_by_id
 from talk.database.connections import get_db_session
 from talk.database.models.user import User, UserPatchModel
 
@@ -25,7 +25,7 @@ JWT_SECRET_KEY = (
 JWT_REFRESH_SECRET_KEY = os.getenv("JWT_REFRESH_SECRET_KEY") or "talkiosecret"  # noqa
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_schema = OAuth2PasswordBearer(tokenUrl="/talk/api/users/login")
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="/talk/api/user/login")
 
 
 async def get_current_user(
