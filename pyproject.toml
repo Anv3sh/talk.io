@@ -38,7 +38,7 @@ types-passlib = "^1.7.7.13"
 email-validator = "^2.0.0.post2"
 types-psycopg2 = "^2.9.21.11"
 pydantic_sqlalchemy = "^0.0.9"
-
+uvicorn = "^0.24.0.post1"
 beautifulsoup4 = "^4.12.2"
 pypdf = "^3.11.0"
 pysrt = "^1.1.2"
@@ -53,6 +53,7 @@ fastavro = "^1.8.0"
 bcrypt = "^4.0.1 "
 cryptography = "^41.0.3"
 types-jmespath = "^1.0.2.7"
+python-dotenv = "^1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"
