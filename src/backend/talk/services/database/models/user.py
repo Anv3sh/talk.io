@@ -1,16 +1,15 @@
+from datetime import datetime, timezone
+from typing import TYPE_CHECKING, Dict, Optional
 from uuid import UUID, uuid4
 
-from typing import Optional, Dict, TYPE_CHECKING
-from sqlmodel import Field, SQLModel, Relationship
-
-from datetime import datetime, timezone
 import sqlalchemy as sa
 from pydantic import EmailStr
-
-from talk.database.models.base import SQLModelSerializable
+from sqlmodel import Field, Relationship, SQLModel
+from talk.services.database.models.base import SQLModelSerializable
 
 if TYPE_CHECKING:
     from talk.database.models.pfp import PFP
+
 
 class User(SQLModelSerializable, table=True):
     user_id: UUID = Field(default_factory=uuid4, primary_key=True, unique=True)
@@ -33,6 +32,7 @@ class User(SQLModelSerializable, table=True):
     last_login_at: Optional[datetime] = Field(
         sa_column=sa.Column(sa.DateTime(timezone=True), nullable=True),
     )
+
 
 class UserPatchModel(SQLModel):
     email: Optional[EmailStr] = Field()

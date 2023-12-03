@@ -1,5 +1,5 @@
-from sqlmodel import SQLModel
 import orjson
+from sqlmodel import SQLModel
 
 
 def orjson_dumps(v, *, default):

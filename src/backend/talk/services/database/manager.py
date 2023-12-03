@@ -1,18 +1,17 @@
 from pathlib import Path
 
-from alembic.config import Config
 from alembic import command
-
+from alembic.config import Config
+from sqlmodel import Session, SQLModel, create_engine
 from talk.api.logger import logger
+from talk.services.database.connections import get_db_connection_url
+from talk.services.database.models import pfp, user
 
-from sqlmodel import create_engine, Session, SQLModel
-from talk.database.connections import get_db_connection_url
-from talk.database.models import user, pfp
 
 class DatabaseManager:
     def __init__(self, database_url: str):
         self.database_url = database_url
-        backend_dir = Path(__file__).parent.parent
+        backend_dir = Path(__file__).parent.parent.parent
         self.script_location = backend_dir / "alembic"
         self.alembic_cfg_path = backend_dir / "alembic.ini"
         self.engine = create_engine(database_url)  # noqa
@@ -49,17 +48,19 @@ class DatabaseManager:
         except Exception as exc:
             print(f"Error creating database and tables: {exc}")
             raise RuntimeError("Error creating database and tables") from exc
-        
+
         from sqlalchemy import inspect
 
         inspector = inspect(self.engine)
-        required_tables = ["user","pfp","alembic_version"]
+        required_tables = ["user", "pfp", "alembic_version"]
         for table in inspector.get_table_names():
             if table not in required_tables:
                 print(table)
                 print("Something went wrong creating the database and tables.")
                 print("Please check your database settings.")
-                raise RuntimeError("Something went wrong creating the database and tables.")
+                raise RuntimeError(
+                    "Something went wrong creating the database and tables."
+                )
         else:
             print("Database and tables created successfully")
         print(inspector.get_table_names())
