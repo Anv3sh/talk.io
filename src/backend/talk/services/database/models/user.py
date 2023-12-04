@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import TYPE_CHECKING, Optional
 from uuid import UUID, uuid4
 
 import sqlalchemy as sa
@@ -8,7 +8,7 @@ from sqlmodel import Field, Relationship, SQLModel
 from talk.services.database.models.base import SQLModelSerializable
 
 if TYPE_CHECKING:
-    from talk.database.models.pfp import PFP
+    from talk.services.database.models.pfp import PFP
 
 
 class User(SQLModelSerializable, table=True):
