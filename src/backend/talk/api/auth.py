@@ -1,20 +1,18 @@
 import os
+from datetime import datetime, timedelta, timezone
+from typing import Annotated, Dict, Optional
 from uuid import UUID
 
-from typing import Optional, Dict, Annotated
-from datetime import timedelta
-from passlib.context import CryptContext
-from jose import JWTError, jwt
-from sqlmodel import Session
-from datetime import datetime,timedelta,timezone
-
-from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
-
-from talk.database.operations.user import get_user_by_email, update_user, get_user_by_id
-from talk.database.connections import get_db_session
-from talk.database.models.user import User, UserPatchModel
-
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from sqlmodel import Session
+from talk.services.database.connections import get_db_session
+from talk.services.database.models.user import User, UserPatchModel
+from talk.services.database.operations.user import (get_user_by_email,
+                                                    get_user_by_id,
+                                                    update_user)
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 1 day
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
@@ -112,6 +110,7 @@ def create_refresh_token(
             detail="Invalid refresh token",
         ) from e
 
+
 def create_token(data: dict, expires_delta: timedelta):
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + expires_delta
@@ -124,26 +123,24 @@ def create_token(data: dict, expires_delta: timedelta):
     )
 
 
-def update_user_last_login_at(
-    user_id: UUID, db: Session = Depends(get_db_session)
-):
+def update_user_last_login_at(user_id: UUID, db: Session = Depends(get_db_session)):
     user_data = UserPatchModel(last_login_at=datetime.now(timezone.utc))  # type: ignore
 
     return update_user(user_id, user_data, db)
 
 
 def authenticate_user(email: str, password: str, db: Session):
-    user = get_user_by_email(db,email)
+    user = get_user_by_email(db, email)
 
     if not user:
         return None
-    
+
     return user if verify_password(password, user.password) else None
-        
+
 
 def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def verify_password(password,hashed_password):
-    return pwd_context.verify(password,hashed_password)
+def verify_password(password, hashed_password):
+    return pwd_context.verify(password, hashed_password)

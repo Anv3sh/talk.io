@@ -1,10 +1,9 @@
-from pydantic import (
-    BaseModel,
-    EmailStr,
-)  # noqa
+from datetime import datetime
 from typing import List, Optional
 from uuid import UUID
-from datetime import datetime
+
+from pydantic import BaseModel, EmailStr  # noqa
+
 
 class UserAuth(BaseModel):
     first_name: str
@@ -12,13 +11,15 @@ class UserAuth(BaseModel):
     email: EmailStr
     password: Optional[str] = None
 
+
 class UserOut(BaseModel):
     first_name: str
     last_name: str
     profile_picture: Optional[str] = None
     email: EmailStr
     is_email_verified: bool
-    
+
+
 class LoginResponseSchema(BaseModel):
     user: UserOut
     access_token: str

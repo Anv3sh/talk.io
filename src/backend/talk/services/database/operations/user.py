@@ -1,16 +1,13 @@
-from sqlmodel import Session
+from datetime import datetime, timezone
+from typing import Union
 from uuid import UUID
 
-from fastapi import HTTPException, Depends
-
+from fastapi import Depends, HTTPException
 from sqlalchemy.exc import IntegrityError
+from sqlmodel import Session
+from talk.services.database.connections import get_db_session
+from talk.services.database.models.user import User, UserPatchModel
 
-from datetime import datetime, timezone
-
-from talk.database.models.user import User, UserPatchModel
-from talk.database.connections import get_db_session
-
-from typing import Union
 
 def get_user_by_email(
     db: Session, email: str, object: bool = False
@@ -28,6 +25,7 @@ def get_user_by_id(
     if object:
         return db_user
     return User.from_orm(db_user) if db_user else None  # type: ignore
+
 
 def update_user(
     user_id: UUID,

@@ -1,6 +1,7 @@
 import os
+
 from dotenv import load_dotenv
-from sqlmodel import create_engine, Session
+from sqlmodel import Session, create_engine
 
 
 def get_db_connection_url():
