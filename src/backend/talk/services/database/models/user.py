@@ -32,6 +32,10 @@ class User(SQLModelSerializable, table=True):
     last_login_at: Optional[datetime] = Field(
         sa_column=sa.Column(sa.DateTime(timezone=True), nullable=True),
     )
+    __tablename__ = 'users'
+    sent_messages: List["Message"] = Relationship(back_populates="sender")          
+    received_messages: List["Message"] = Relationship(back_populates="receiver")
+
 
 
 class UserPatchModel(SQLModel):
