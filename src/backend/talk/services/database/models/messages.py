@@ -22,7 +22,8 @@ class Message(SQLModelSerializable, table=True):
     sender_id: int = Field(foreign_key="user.user_id", nullable=False)
     reciever_id: int = Field(foreign_key="user.user_id", nullable=True)
 
-    message_content: MessageType = Field(default="text")
+    message_content: str
+    message_type: MessageType = Field(default="text")
     time_sent: datetime = Field(default_factory=lambda: datetime.utcnow().replace(tzinfo=timezone.utc))
 
     is_delivered: bool
