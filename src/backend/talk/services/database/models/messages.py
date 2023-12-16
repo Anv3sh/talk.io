@@ -34,6 +34,6 @@ class Message(SQLModelSerializable, table=True):
     is_group_message: bool = Field(default=False)
     group_id: int = Field(foreign_key="group.group_id", nullable=True)
 
-    user: "User" = Relationship(back_populates="user.user_id")
-    user: "Group" = Relationship(back_populates="group.group_id")
+    user: "User" = Relationship(back_populates="messages")
+    group: "Group" = Relationship(back_populates="groups")
 

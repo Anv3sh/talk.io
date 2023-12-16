@@ -10,6 +10,7 @@ from talk.services.database.models.base import SQLModelSerializable
 if TYPE_CHECKING:
     from talk.services.database.models.pfp import PFP
     from talk.services.database.models.groups import Group
+    from talk.services.database.models.messages import Message
     from talk.services.database.models.groupsuserslink import GroupUserLink
 
 
@@ -36,6 +37,7 @@ class User(SQLModelSerializable, table=True):
     )
 
     pfp: Optional["PFP"] = Relationship(back_populates="user")
+    messages: List[Message] = Relationship(back_populates="user")
     groups: List[Group] = Relationship(back_populates="users", link_model=GroupUserLink)
 
 
