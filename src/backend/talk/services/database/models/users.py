@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, List
 from uuid import UUID, uuid4
 
 import sqlalchemy as sa
@@ -9,6 +9,8 @@ from talk.services.database.models.base import SQLModelSerializable
 
 if TYPE_CHECKING:
     from talk.services.database.models.pfp import PFP
+    from talk.services.database.models.groups import Group
+    from talk.services.database.models.groupsuserslink import GroupUserLink
 
 
 class User(SQLModelSerializable, table=True):
@@ -34,6 +36,7 @@ class User(SQLModelSerializable, table=True):
     )
 
     pfp: Optional["PFP"] = Relationship(back_populates="user")
+    groups: List[Group] = Relationship(back_populates="users", link_model=GroupUserLink)
 
 
 class UserPatchModel(SQLModel):
