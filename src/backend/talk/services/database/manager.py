@@ -4,8 +4,6 @@ from alembic import command
 from alembic.config import Config
 from sqlmodel import Session, SQLModel, create_engine
 from talk.api.logger import logger
-from talk.services.database.connections import get_db_connection_url
-from talk.services.database.models import pfp, user
 
 
 class DatabaseManager:

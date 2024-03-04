@@ -1,6 +1,4 @@
-from datetime import datetime
-from typing import List, Optional
-from uuid import UUID
+from typing import Optional
 
 from pydantic import BaseModel, EmailStr  # noqa
 

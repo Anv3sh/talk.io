@@ -17,7 +17,6 @@ class User(SQLModelSerializable, table=True):
     last_name: str
     password: Optional[str] = None
     email: str = Field(unique=True)
-    pfp: Optional["PFP"] = Relationship(back_populates="user")
     is_email_verified: bool = Field(default=True)
     is_active: bool = Field(default=True)
     is_superuser: bool = Field(default=False)
