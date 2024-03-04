@@ -7,9 +7,6 @@ from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 from talk.services.database.models.base import SQLModelSerializable
 
-if TYPE_CHECKING:
-    from talk.services.database.models.pfp import PFP
-
 
 class User(SQLModelSerializable, table=True):
     user_id: UUID = Field(default_factory=uuid4, primary_key=True, unique=True)
