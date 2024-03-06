@@ -10,11 +10,9 @@ from passlib.context import CryptContext
 from sqlmodel import Session
 from talk.services.database.connections import get_db_session
 from talk.services.database.models.user import User, UserPatchModel
-from talk.services.database.operations.user import (
-    get_user_by_email,
-    get_user_by_id,
-    update_user,
-)
+from talk.services.database.operations.user import (get_user_by_email,
+                                                    get_user_by_id,
+                                                    update_user)
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 1 day
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days

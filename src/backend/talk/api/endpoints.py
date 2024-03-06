@@ -1,22 +1,12 @@
 from uuid import uuid4
 
-from fastapi import (
-    APIRouter,
-    Depends,
-    HTTPException,
-    WebSocket,
-    WebSocketDisconnect,
-    status,
-)
+from fastapi import (APIRouter, Depends, HTTPException, WebSocket,
+                     WebSocketDisconnect, status)
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session
-from talk.api.auth import (
-    authenticate_user,
-    create_user_tokens,
-    get_current_user,
-    get_password_hash,
-)
+from talk.api.auth import (authenticate_user, create_user_tokens,
+                           get_current_user, get_password_hash)
 from talk.api.schema import LoginResponseSchema, UserAuth
 from talk.services.chat.manager import ConnectionManager
 from talk.services.database.connections import get_db_session
