@@ -1,11 +1,17 @@
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 from uuid import UUID, uuid4
 
 import sqlalchemy as sa
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 from talk.services.database.models.base import SQLModelSerializable
+from talk.services.database.models.group_user_link import GroupUserLink
+
+if TYPE_CHECKING:
+    from talk.services.database.models.group import Group
+    from talk.services.database.models.message import Message
+    from talk.services.database.models.user_message_link import UserMessageLink
 
 
 class User(SQLModelSerializable, table=True):
@@ -17,7 +23,7 @@ class User(SQLModelSerializable, table=True):
     is_email_verified: bool = Field(default=True)
     is_active: bool = Field(default=True)
     is_superuser: bool = Field(default=False)
-    create_at: Optional[datetime] = Field(
+    created_at: Optional[datetime] = Field(
         sa_column=sa.Column(sa.DateTime(timezone=True), nullable=False),
         default_factory=lambda: datetime.utcnow().replace(tzinfo=timezone.utc),
     )
@@ -28,6 +34,8 @@ class User(SQLModelSerializable, table=True):
     last_login_at: Optional[datetime] = Field(
         sa_column=sa.Column(sa.DateTime(timezone=True), nullable=True),
     )
+    messages: List["UserMessageLink"] = Relationship(back_populates="user")
+    groups: List["GroupUserLink"] = Relationship(back_populates="user")
 
 
 class UserPatchModel(SQLModel):

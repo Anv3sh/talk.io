@@ -4,6 +4,8 @@ from alembic import command
 from alembic.config import Config
 from sqlmodel import Session, SQLModel, create_engine
 from talk.api.logger import logger
+from talk.services.database.models import (Group, GroupUserLink, Message, User,
+                                           UserMessageLink)
 
 
 class DatabaseManager:
@@ -50,7 +52,14 @@ class DatabaseManager:
         from sqlalchemy import inspect
 
         inspector = inspect(self.engine)
-        required_tables = ["user", "pfp", "alembic_version"]
+        required_tables = [
+            "user",
+            "group",
+            "message",
+            "group_user_link",
+            "user_message_link",
+            "alembic_version",
+        ]
         for table in inspector.get_table_names():
             if table not in required_tables:
                 print(table)
